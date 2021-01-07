@@ -9,9 +9,9 @@ hasNextPage = "True"
 
 def run_query(endCursor=""): 
     if endCursor == "":
-        searchQuery = 'search(query: "location:Nashville", type: USER, first: 3)'
+        searchQuery = 'search(, first: 1, query: "location:Nashville", type: USER)'
     else:
-        searchQuery = f'search( first: 3, after: "{endCursor}", query: "location:Nashville", type: USER)'
+        searchQuery = f'search(first: 1, after: "{endCursor}", query: "location:Nashville", type: USER)'
     
     query = f"""
     {{
@@ -35,13 +35,13 @@ def parse_query():
     startCursor = result["data"]["search"]["pageInfo"]["startCursor"]
     hasNextPage =  str(result["data"]["search"]["pageInfo"]["hasNextPage"])
     print (result)
-    print (startCursor, endCursor, hasNextPage)  
+    print ("Cursors",startCursor, endCursor, "Has next page:", hasNextPage)  
     while hasNextPage == 'True':
         result = run_query(endCursor) 
         endCursor = result["data"]["search"]["pageInfo"]["endCursor"]
         startCursor = result["data"]["search"]["pageInfo"]["startCursor"]
         hasNextPage =  str(result["data"]["search"]["pageInfo"]["hasNextPage"])
         print (result)
-        print (startCursor, endCursor, hasNextPage)
+        print ("Cursors",startCursor, endCursor, "Has next page:", hasNextPage)  
 
 parse_query()
