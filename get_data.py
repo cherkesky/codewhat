@@ -1,6 +1,8 @@
 import requests
 from query import block
 from secret import token
+from termcolor import colored
+
 
 startCursor = ""
 endCursor = ""
@@ -41,6 +43,9 @@ def parse_query():
         startCursor = result["data"]["search"]["pageInfo"]["startCursor"]
         hasNextPage =  str(result["data"]["search"]["pageInfo"]["hasNextPage"])
         print (result)
-        print ("Cursors",startCursor, endCursor, "Has next page:", hasNextPage)  
+        if hasNextPage == 'True':
+            print("Cursors",startCursor, endCursor, "Has next page:", (colored(hasNextPage, 'green')))
+        else:
+            print("Cursors",startCursor, endCursor, "Has next page:", (colored(hasNextPage, 'red')))
 
 parse_query()
