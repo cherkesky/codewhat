@@ -29,7 +29,6 @@ def run_query(endCursor=""):
 
 
 def parse_query():
-    
     result = run_query() 
     endCursor = result["data"]["search"]["pageInfo"]["endCursor"]
     startCursor = result["data"]["search"]["pageInfo"]["startCursor"]
