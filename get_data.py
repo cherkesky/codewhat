@@ -8,6 +8,7 @@ startCursor = ""
 endCursor = ""
 headers = {"Authorization": token}
 hasNextPage = "True"
+colors =["red","green","yellow","blue","magenta","cyan","white","red","green","yellow","blue","magenta","cyan","white"]
 
 def run_query(endCursor=""): 
     if endCursor == "":
@@ -37,10 +38,13 @@ def parse_query():
     hasNextPage =  str(result["data"]["search"]["pageInfo"]["hasNextPage"])
     nodes = result["data"]["search"]["edges"][0]["node"]["repositories"]["nodes"]
     user = result["data"]["search"]["edges"][0]["node"]["name"]
+    color_counter=0
     for node in nodes:
+        color_counter+=1
         repos = node["languages"]["nodes"]
         for repo in repos:
-            print (user, node["id"], repo["name"])
+            print (user,(colored(node["id"], colors[color_counter])),repo["name"])
+
     print ("Cursors",startCursor, endCursor, "Has next page:", hasNextPage)  
     while hasNextPage == 'True':
         result = run_query(endCursor) 
@@ -49,18 +53,20 @@ def parse_query():
         hasNextPage =  str(result["data"]["search"]["pageInfo"]["hasNextPage"])
         nodes = result["data"]["search"]["edges"][0]["node"]["repositories"]["nodes"]
         user = result["data"]["search"]["edges"][0]["node"]["name"]
+        color_counter=0
         for node in nodes:
+            color_counter+=1
             repos = node["languages"]["nodes"]
             for repo in repos:
-                print (user, node["id"], repo["name"])
+                print (user,(colored(node["id"], colors[color_counter])),repo["name"])
         if hasNextPage == 'True':
             print ("---------------------------------------------------------------------------------")
-            print("Cursors",startCursor, endCursor, "Has next page:", (colored(hasNextPage, 'green')))
+            print("Cursors",startCursor, endCursor, "Has next page:", (colored(hasNextPage, colors[1])))
             print ("---------------------------------------------------------------------------------")
 
         else:
             print ("---------------------------------------------------------------------------------")
-            print("Cursors",startCursor, endCursor, "Has next page:", (colored(hasNextPage, 'red')))
+            print("Cursors",startCursor, endCursor, "Has next page:", (colored(hasNextPage, colors[0])))
             print ("---------------------------------------------------------------------------------")
 
 
