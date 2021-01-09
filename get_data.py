@@ -35,14 +35,14 @@ def parse_query():
     endCursor = result["data"]["search"]["pageInfo"]["endCursor"]
     startCursor = result["data"]["search"]["pageInfo"]["startCursor"]
     hasNextPage =  str(result["data"]["search"]["pageInfo"]["hasNextPage"])
-    print (result)
+    print (result["data"]["search"]["edges"][0]["node"]["repositories"]["nodes"])
     print ("Cursors",startCursor, endCursor, "Has next page:", hasNextPage)  
     while hasNextPage == 'True':
         result = run_query(endCursor) 
         endCursor = result["data"]["search"]["pageInfo"]["endCursor"]
         startCursor = result["data"]["search"]["pageInfo"]["startCursor"]
         hasNextPage =  str(result["data"]["search"]["pageInfo"]["hasNextPage"])
-        print (result)
+        print (result["data"]["search"]["edges"][0]["node"]["repositories"]["nodes"])
         if hasNextPage == 'True':
             print("Cursors",startCursor, endCursor, "Has next page:", (colored(hasNextPage, 'green')))
         else:
