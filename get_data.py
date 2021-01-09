@@ -3,12 +3,12 @@ from query import block
 from secret import token
 from termcolor import colored
 
-
 startCursor = ""
 endCursor = ""
 headers = {"Authorization": token}
 hasNextPage = "True"
-colors =["red","green","yellow","blue","magenta","cyan","white","red","green","yellow","blue","magenta","cyan","white"]
+colors =["red","green","yellow","blue","magenta","cyan","white","red","green","yellow","blue","magenta"]
+lang_counter_dict={}
 
 def run_query(endCursor=""): 
     if endCursor == "":
@@ -39,16 +39,19 @@ def parse_query():
     nodes = result["data"]["search"]["edges"][0]["node"]["repositories"]["nodes"]
     user = result["data"]["search"]["edges"][0]["node"]["name"]
     color_counter=0
-    lang_python=0
     repo_counter=0
+    location = result["data"]["search"]["edges"][0]["node"]["location"]
     for node in nodes:
         color_counter+=1
         repos = node["languages"]["nodes"]
         repo_counter+=1
         for repo in repos:
             print (user,(colored(node["id"], colors[color_counter])),repo["name"])
-            if repo["name"] == "Python":
-                lang_python+=1
+            if repo["name"] in lang_counter_dict:
+                lang_counter_dict[f'{repo["name"]}']+=1
+            else:
+                lang_counter_dict[f'{repo["name"]}'] = 1
+
     print ("Cursors",startCursor, endCursor, "Has next page:", hasNextPage)  
     while hasNextPage == 'True':
         result = run_query(endCursor) 
@@ -63,19 +66,26 @@ def parse_query():
             repos = node["languages"]["nodes"]
             repo_counter+=1
             for repo in repos:
-                print (user,(colored(node["id"], colors[color_counter])),repo["name"])
-                if repo["name"] == "Python":
-                    lang_python+=1
+                print (user,(colored(node["id"], colors[color_counter])),repo["name"], )
+                if repo["name"] in lang_counter_dict:
+                    lang_counter_dict[f'{repo["name"]}']+=1
+                else:
+                   lang_counter_dict[f'{repo["name"]}'] = 1
+
         if hasNextPage == 'True':
             print ("---------------------------------------------------------------------------------")
             print ("Cursors",startCursor, endCursor, "Has next page:", (colored(hasNextPage, colors[1])))
-            print ("Counters:", "Repos:", repo_counter, "Python:", lang_python)
+            print ("Location:", location)
+            print ("Counters:", "Repos:", repo_counter)
             print ("---------------------------------------------------------------------------------")
 
         else:
             print ("---------------------------------------------------------------------------------")
             print ("Cursors",startCursor, endCursor, "Has next page:", (colored(hasNextPage, colors[0])))
+            print ("Location:", location)
+            print ("Counters:", "Repos:", repo_counter)
             print ("---------------------------------------------------------------------------------")
+            print ((colored("Language Counter:", colors[7])), lang_counter_dict )
 
 
 parse_query()
