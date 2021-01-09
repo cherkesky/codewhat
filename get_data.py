@@ -35,17 +35,33 @@ def parse_query():
     endCursor = result["data"]["search"]["pageInfo"]["endCursor"]
     startCursor = result["data"]["search"]["pageInfo"]["startCursor"]
     hasNextPage =  str(result["data"]["search"]["pageInfo"]["hasNextPage"])
-    print (result["data"]["search"]["edges"][0]["node"]["repositories"]["nodes"])
+    nodes = result["data"]["search"]["edges"][0]["node"]["repositories"]["nodes"]
+    user = result["data"]["search"]["edges"][0]["node"]["name"]
+    for node in nodes:
+        repos = node["languages"]["nodes"]
+        for repo in repos:
+            print (user, node["id"], repo["name"])
     print ("Cursors",startCursor, endCursor, "Has next page:", hasNextPage)  
     while hasNextPage == 'True':
         result = run_query(endCursor) 
         endCursor = result["data"]["search"]["pageInfo"]["endCursor"]
         startCursor = result["data"]["search"]["pageInfo"]["startCursor"]
         hasNextPage =  str(result["data"]["search"]["pageInfo"]["hasNextPage"])
-        print (result["data"]["search"]["edges"][0]["node"]["repositories"]["nodes"])
+        nodes = result["data"]["search"]["edges"][0]["node"]["repositories"]["nodes"]
+        user = result["data"]["search"]["edges"][0]["node"]["name"]
+        for node in nodes:
+            repos = node["languages"]["nodes"]
+            for repo in repos:
+                print (user, node["id"], repo["name"])
         if hasNextPage == 'True':
+            print ("---------------------------------------------------------------------------------")
             print("Cursors",startCursor, endCursor, "Has next page:", (colored(hasNextPage, 'green')))
+            print ("---------------------------------------------------------------------------------")
+
         else:
+            print ("---------------------------------------------------------------------------------")
             print("Cursors",startCursor, endCursor, "Has next page:", (colored(hasNextPage, 'red')))
+            print ("---------------------------------------------------------------------------------")
+
 
 parse_query()
