@@ -51,7 +51,6 @@ def parse_query():
                 lang_counter_dict[f'{repo["name"]}']+=1
             else:
                 lang_counter_dict[f'{repo["name"]}'] = 1
-
     print ("Cursors",startCursor, endCursor, "Has next page:", hasNextPage)  
     while hasNextPage == 'True':
         result = run_query(endCursor) 
@@ -71,21 +70,20 @@ def parse_query():
                     lang_counter_dict[f'{repo["name"]}']+=1
                 else:
                    lang_counter_dict[f'{repo["name"]}'] = 1
-
         if hasNextPage == 'True':
             print ("---------------------------------------------------------------------------------")
             print ("Cursors",startCursor, endCursor, "Has next page:", (colored(hasNextPage, colors[1])))
             print ("Location:", location)
             print ("Counters:", "Repos:", repo_counter)
             print ("---------------------------------------------------------------------------------")
-
         else:
+            sorted_lang_counter_dict = sorted(lang_counter_dict.items(), key=lambda x: x[1],reverse=True)
             print ("---------------------------------------------------------------------------------")
             print ("Cursors",startCursor, endCursor, "Has next page:", (colored(hasNextPage, colors[0])))
             print ("Location:", location)
             print ("Counters:", "Repos:", repo_counter)
             print ("---------------------------------------------------------------------------------")
-            print ((colored("Language Counter:", colors[7])), lang_counter_dict )
+            print ((colored("Languages Counted:", colors[6])), sorted_lang_counter_dict )
 
 
 parse_query()
