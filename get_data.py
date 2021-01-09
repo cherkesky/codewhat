@@ -39,12 +39,16 @@ def parse_query():
     nodes = result["data"]["search"]["edges"][0]["node"]["repositories"]["nodes"]
     user = result["data"]["search"]["edges"][0]["node"]["name"]
     color_counter=0
+    lang_python=0
+    repo_counter=0
     for node in nodes:
         color_counter+=1
         repos = node["languages"]["nodes"]
+        repo_counter+=1
         for repo in repos:
             print (user,(colored(node["id"], colors[color_counter])),repo["name"])
-
+            if repo["name"] == "Python":
+                lang_python+=1
     print ("Cursors",startCursor, endCursor, "Has next page:", hasNextPage)  
     while hasNextPage == 'True':
         result = run_query(endCursor) 
@@ -57,16 +61,20 @@ def parse_query():
         for node in nodes:
             color_counter+=1
             repos = node["languages"]["nodes"]
+            repo_counter+=1
             for repo in repos:
                 print (user,(colored(node["id"], colors[color_counter])),repo["name"])
+                if repo["name"] == "Python":
+                    lang_python+=1
         if hasNextPage == 'True':
             print ("---------------------------------------------------------------------------------")
-            print("Cursors",startCursor, endCursor, "Has next page:", (colored(hasNextPage, colors[1])))
+            print ("Cursors",startCursor, endCursor, "Has next page:", (colored(hasNextPage, colors[1])))
+            print ("Counters:", "Repos:", repo_counter, "Python:", lang_python)
             print ("---------------------------------------------------------------------------------")
 
         else:
             print ("---------------------------------------------------------------------------------")
-            print("Cursors",startCursor, endCursor, "Has next page:", (colored(hasNextPage, colors[0])))
+            print ("Cursors",startCursor, endCursor, "Has next page:", (colored(hasNextPage, colors[0])))
             print ("---------------------------------------------------------------------------------")
 
 
