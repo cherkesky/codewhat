@@ -1,4 +1,5 @@
 import requests
+import json
 from query import block
 from secret import token
 from termcolor import colored
@@ -80,12 +81,16 @@ def parse_query():
             print ("---------------------------------------------------------------------------------")
         else:
             sorted_lang_counter_dict = sorted(lang_counter_dict.items(), key=lambda x: x[1],reverse=True)
+            json_lang_counter = json.dumps(sorted_lang_counter_dict, indent = 4)
+
             print ("---------------------------------------------------------------------------------")
             print ("Cursor:", endCursor, "Has next page:", (colored(hasNextPage, colors[0])))
             print ("Location:", location)
             print ("Counters:", "Repos:", repo_counter)
             print ("---------------------------------------------------------------------------------")
             print ((colored("Languages Counted:", colors[6])), sorted_lang_counter_dict )
+            # print ("*********")
+            # print (json_lang_counter)
 
 
 parse_query()
